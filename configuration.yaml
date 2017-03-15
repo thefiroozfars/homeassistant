@@ -1,0 +1,159 @@
+homeassistant:
+  name: Home
+  latitude: !secret latitude
+  longitude: !secret longitude
+  elevation: 107
+  unit_system: imperial
+  time_zone: America/New_York
+  customize: !include_dir_merge_named customizations
+
+# Show links to resources in log and frontend
+# introduction:
+
+frontend:
+discovery:
+conversation:
+history:
+logbook:
+sun:
+config:
+
+http:
+  api_password: !secret api_password
+  ssl_certificate: !secret ssl_certificate
+  ssl_key: !secret ssl_key
+  
+zone:
+  name: Home
+  latitude: !secret latitude
+  longitude: !secret longitude
+  radius: 30
+  icon: mdi:home
+  
+
+recorder:
+  purge_days: 4
+  db_url: !secret mysql_recorder
+
+
+# logger:
+  # default: warning
+  # logs:
+    # homeassistant.components.sun: error
+    # homeassistant.components.envisalink: warning
+    # homeassistant.components.http: info
+    # homeassistant.core: info
+
+# Groups
+group: !include groups.yaml
+
+# Weather Radar
+camera:
+  platform: generic
+  still_image_url: !secret weathermap_url
+  name: DCA
+
+sensor:
+  - platform: wunderground
+    api_key: !secret wunderground_key
+    monitored_conditions:
+      - weather
+      - temp_f
+      - feelslike_string
+      - pressure_in
+      - wind_string
+      - relative_humidity
+  - platform: systemmonitor
+    resources:
+      - type: disk_use_percent
+        arg: /
+      - type: memory_free
+      - type: processor_use
+      - type: network_in
+        arg: eth0
+      - type: network_out
+        arg: eth0
+      - type: last_boot
+  - platform: speedtest
+    monitored_conditions:
+      - download
+      - upload
+  - platform: mqtt
+    state_topic: "smartthings/Garage Door/contact"
+    name: "Garage Door contact"
+    qos: 0
+    payload_on: "open"
+    payload_off: "closed"
+    device_class: opening
+  - platform: mqtt
+    state_topic: "smartthings/Garage Door/temperature"
+    name: "Garage Temperature"
+    unit_of_measurement: "°F"
+
+binary_sensor:
+  - platform: mqtt
+    state_topic: "smartthings/Garage Door/acceleration"
+    name: "Garage Door Acceleration"
+    qos: 0
+    payload_on: "active"
+    payload_off: "inactive"
+    device_class: vibration
+
+
+# Text to speech
+tts:
+  platform: google
+  
+# MQTT  
+mqtt:
+  broker: localhost 
+  port: 1883
+  client_id: home-assistant-1
+  keepalive: 60
+  username: !secret mqqt_user
+  password: !secret mqqt_pw
+  protocol: 3.1
+  birth_message:
+    topic: 'hass/status'
+    payload: 'online'
+    qos: 1
+    retain: true
+  will_message:
+    topic: 'hass/status'
+    payload: 'offline'
+    qos: 1
+    retain: true
+    
+device_tracker:
+  - platform: mqtt
+    devices:
+      mehrdad_iphone: "smartthings/Mehrdad's iPhone/presence"
+      adela_iphone: "smartthings/Adela's iPhone/presence"
+      
+input_slider:
+  brightness_fr:
+    name: Brightness
+    initial: 1
+    min: 0
+    max: 255
+    step: 1
+
+input_select:
+  scene_entrance_lamp:
+    name: Entrance Lamp Scene
+    icon: mdi:brightness-auto
+    initial: "-"
+    options:
+      - "-"
+      - "Off"
+      - Nightlight
+      - Bright
+      
+envisalink: !include envisalink.yaml
+light: !include light.yaml
+scene: !include scene.yaml
+automation: !include_dir_merge_list automation/
+script: !include scripts.yaml
+
+
+# END

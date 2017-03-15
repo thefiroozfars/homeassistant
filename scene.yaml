@@ -1,0 +1,14 @@
+- name: Entrance Lamp Off
+  entities:
+    light.entrance_lamp:
+      state: off
+- name: Entrance Lamp Nightlight
+  entities:
+    light.entrance_lamp:
+      state: on
+      brightness: 100
+- name: Entrance Lamp Bright
+  entities:
+    light.entrance_lamp:
+      state: on
+      brightness: 255

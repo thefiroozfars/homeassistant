@@ -1,0 +1,16 @@
+*.pid
+*.xml
+*.csr
+*.crt
+*.key
+*.conf
+www
+home-assistant.log
+home-assistant_v2.db
+*.db-journal
+lib
+deps
+tts
+secrets.yaml
+known_devices.yaml
+.uuid

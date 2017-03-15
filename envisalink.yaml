@@ -1,0 +1,65 @@
+host: envisalink
+panel_type: DSC
+user_name: !secret evl_user
+password: !secret evl_pass
+code: !secret evl_code
+port: 4025
+evl_version: 3
+keepalive_interval: 60
+zonedump_interval: 300
+panic_type: Police
+zones:
+  1:
+    name: 'Basement Motion'
+    type: 'motion'
+  2:
+    name: 'Glass Break'
+    type: 'sound'
+  4:
+    name: 'Main Floor Smoke Detector'
+    type: 'smoke'
+  5:
+    name: 'Main Floor Motion'
+    type: 'motion'
+  6:
+    name: 'Family Room Motion'
+    type: 'motion'
+  7:
+    name: 'Living Room Motion'
+    type: 'motion'
+  9:
+    name: 'Main Door'
+    type: 'opening'
+  10:
+    name: 'Kitchen Door'
+    type: 'opening'
+  11:
+    name: 'Family Room Door'
+    type: 'opening'
+  12:
+    name: 'Back Deck Door'
+    type: 'opening'
+  13:
+    name: 'Basement Door'
+    type: 'opening'
+  14:
+    name: 'Powder Window'
+    type: 'opening'
+  15:
+    name: 'Dining Window'
+    type: 'opening'
+  16:
+    name: 'Family Window L'
+    type: 'opening'
+  17:
+    name: 'Family Window R'
+    type: 'opening'
+  18:
+    name: 'Master Window L'
+    type: 'opening'
+  19:
+    name: 'Master Window R'
+    type: 'opening'
+partitions:
+  1:
+    name: 'Home Alarm'

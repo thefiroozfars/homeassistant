@@ -1,0 +1,28 @@
+- platform: hue
+  host: 192.168.1.196
+  allow_unreachable: true
+- platform: mqtt
+  name: "Family Room Lights"
+  state_topic: "smartthings/Family Room Lights/switch"
+  command_topic: "smartthings/Family Room Lights/switch"
+  brightness_state_topic: "smartthings/Family Room Lights/level"
+  brightness_command_topic: "smartthings/Family Room Lights/level"
+  payload_on: "on"
+  payload_off: "off"
+  retain: true
+  brightness_scale: 99
+- platform: mqtt
+  name: "Front Door Lights"
+  state_topic: "smartthings/Front door lights/switch"
+  command_topic: "smartthings/Front door lights/switch"
+  payload_on: "on"
+  payload_off: "off"
+  retain: true
+- platform: mqtt
+  name: "Living Room Corner Light"
+  state_topic: "smartthings/Plugin Outlet/switch"
+  command_topic: "smartthings/Plugin Outlet/switch"
+  payload_on: "on"
+  payload_off: "off"
+  retain: true
+  

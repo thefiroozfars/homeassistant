@@ -1,0 +1,48 @@
+sensor.garage_door_contact:
+  icon: mdi:glassdoor
+binary_sensor.main_door:
+  icon: mdi:glassdoor
+binary_sensor.kitchen_door:
+  icon: mdi:glassdoor
+binary_sensor.family_room_door:
+  icon: mdi:glassdoor
+binary_sensor.back_deck_door:
+  icon: mdi:glassdoor
+binary_sensor.basement_door:
+  icon: mdi:glassdoor
+binary_sensor.powder_window:
+  icon: mdi:window-closed
+binary_sensor.family_window_l:
+  icon: mdi:window-closed
+binary_sensor.family_window_r:
+  icon: mdi:window-closed
+binary_sensor.dining_window:
+  icon: mdi:window-closed
+binary_sensor.master_window_l:
+  icon: mdi:window-closed
+binary_sensor.master_window_r:
+  icon: mdi:window-closed
+binary_sensor.garage_door_acceleration:
+  icon: mdi:vibrate
+sensor.pws_weather:
+  friendly_name: Weather
+sensor.pws_temp_f:
+  friendly_name: Temperature
+sensor.pws_feelslike_string:
+  friendly_name: Feels Like
+  icon: mdi:thermometer
+sensor.pws_wind_string:
+  friendly_name: Wind   
+  icon: mdi:weather-windy
+sensor.pws_relative_humidity:
+  friendly_name: Humidity
+  icon: mdi:weather-rainy
+sensor.pws_pressure_in:
+  friendly_name: Pressure
+  icon: mdi:thermometer-lines
+sensor.speedtest_download:
+  friendly_name: Download Speed
+  icon: mdi:speedometer
+sensor.speedtest_upload:
+  friendly_name: Upload Speed
+  icon: mdi:speedometer

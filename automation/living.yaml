@@ -1,0 +1,62 @@
+- alias: 'Living Room Off 1hr'
+  trigger:
+    platform: state
+    entity_id: binary_sensor.living_room_motion
+    to: 'off'
+    for:
+      hours: 1
+  condition:
+    condition: and
+    conditions:
+    - condition: state
+      entity_id: group.living_room
+      state: 'on'
+    - condition: or
+      conditions:      
+      - condition: sun
+        before: sunrise
+      - condition: time          
+        after: '22:00:00'
+  action:
+    service: light.turn_off
+    data:
+      entity_id: group.living_room
+- alias: 'Living Room on after sunset'
+  trigger:
+    platform: state
+    entity_id: binary_sensor.living_room_motion
+    to: 'on'
+  condition:
+    condition: and
+    conditions:
+      - condition: sun
+        after: sunset
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: light.living_room_corner_light
+          state: 'off'
+        - condition: state
+          entity_id: light.living_window_lamp
+          state: 'off'
+      - condition: or
+        conditions:      
+        - condition: time          
+          before: '22:00:00'
+          weekday:
+          - sun
+          - mon
+          - tue
+          - wed
+          - thu
+        - condition: time          
+          before: '23:00:00'
+          weekday:
+          - fri
+          - sat
+  action:
+    - service: light.turn_on
+      data:
+        entity_id:
+          - light.living_room_corner_light
+          - light.living_window_lamp
