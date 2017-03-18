@@ -36,10 +36,6 @@
         entity_id:
           - light.family_door_lamp
           - light.family_corner_lamp
-    - service: input_slider.select_value   
-      data_template:     
-        entity_id: input_slider.brightness_fr   
-        value: 0
 - alias: 'Family Level Change'
   trigger:
     platform: state

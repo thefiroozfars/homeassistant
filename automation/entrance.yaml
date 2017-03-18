@@ -4,16 +4,16 @@
     entity_id: binary_sensor.main_floor_motion
     to: 'off'
     for:
-      minutes: 15
+      minutes: 1
   condition:
     condition: and
     conditions:
       - condition: state
-        entity_id: sun.sun
-        state: 'below_horizon'    
-      - condition: state
         entity_id: light.entrance_lamp
         state: 'on'
+      - condition: state
+        entity_id: sun.sun
+        state: 'below_horizon'    
       - condition: or
         conditions:      
         - condition: sun
