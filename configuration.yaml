@@ -89,7 +89,13 @@ sensor:
     state_topic: "smartthings/Garage Door/temperature"
     name: "Garage Temperature"
     unit_of_measurement: "°F"
-
+  - platform: template
+    hide_entity: True
+    sensors:
+      current_familyroom_brightness:
+        friendly_name: 'Family Light Brightness'
+        value_template: '{{ states.light.family_room_lights.attributes.brightness }}'
+      
 binary_sensor:
   - platform: mqtt
     state_topic: "smartthings/Garage Door/acceleration"
@@ -130,13 +136,13 @@ device_tracker:
       mehrdad_iphone: "smartthings/Mehrdad's iPhone/presence"
       adela_iphone: "smartthings/Adela's iPhone/presence"
       
-input_slider:
-  brightness_fr:
-    name: Brightness
-    initial: 1
-    min: 0
-    max: 255
-    step: 1
+# input_slider:
+  # brightness_fr:
+    # name: Brightness
+    # initial: 1
+    # min: 1
+    # max: 255
+    # step: 1
 
 input_select:
   scene_entrance_lamp:

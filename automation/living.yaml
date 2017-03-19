@@ -1,62 +1,65 @@
-- alias: 'Living Room Off 1hr'
+- alias: "Living Room On After Sunset"
+  hide_entity: True
+  trigger:
+    - platform: sun
+      event: sunset
+  condition:
+    condition: or
+    conditions:
+    - condition: state
+      entity_id: light.living_room_corner_light
+      state: 'off'
+    - condition: state
+      entity_id: light.living_window_lamp
+      state: 'off'
+  action: 
+    service: homeassistant.turn_on
+    entity_id: 
+      - light.living_room_corner_light
+      - light.living_window_lamp
+- alias: "Living Room Off Timer"
+  hide_entity: True
+  trigger:
+    platform: time
+    after: "21:00"
+  condition:
+    condition: or
+    conditions:
+      - condition: sun
+        after: sunset
+      - condition: sun
+        before: sunrise
+  action:
+    - service: script.turn_off
+      entity_id: script.timed_lamps_livingroom
+    - service: script.timed_lamps_livingroom
+- alias: 'Living Room Motion Trigger'
+  hide_entity: True
   trigger:
     platform: state
     entity_id: binary_sensor.living_room_motion
     to: 'off'
-    for:
-      hours: 1
   condition:
     condition: and
     conditions:
-    - condition: state
-      entity_id: group.living_room
-      state: 'on'
-    - condition: or
-      conditions:      
-      - condition: sun
-        before: sunrise
       - condition: time          
-        after: '22:00:00'
-  action:
-    service: light.turn_off
-    data:
-      entity_id: group.living_room
-- alias: 'Living Room on after sunset'
-  trigger:
-    platform: state
-    entity_id: binary_sensor.living_room_motion
-    to: 'on'
-  condition:
-    condition: and
-    conditions:
-      - condition: sun
-        after: sunset
+        after: '21:00:00'       
+      - condition: or
+        conditions:
+          - condition: sun
+            after: sunset
+          - condition: sun
+            before: sunrise
       - condition: or
         conditions:
         - condition: state
           entity_id: light.living_room_corner_light
-          state: 'off'
+          state: 'on'
         - condition: state
           entity_id: light.living_window_lamp
-          state: 'off'
-      - condition: or
-        conditions:      
-        - condition: time          
-          before: '22:00:00'
-          weekday:
-          - sun
-          - mon
-          - tue
-          - wed
-          - thu
-        - condition: time          
-          before: '23:00:00'
-          weekday:
-          - fri
-          - sat
+          state: 'on'
   action:
-    - service: light.turn_on
-      data:
-        entity_id:
-          - light.living_room_corner_light
-          - light.living_window_lamp
+    - service: script.turn_off
+      entity_id: script.timed_lamps_livingroom
+    - service: script.timed_lamps_livingroom
+  

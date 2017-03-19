@@ -1,73 +1,39 @@
-- alias: 'Family Room On'
+- alias: Keep Family room brightness in sync
+  hide_entity: True
   trigger:
     platform: state
-    entity_id: light.family_room_lights
-    to: 'on'
-    from: 'off'
+    entity_id: sensor.current_familyroom_brightness
   action:
     - service: light.turn_on
-      data:
-        entity_id:
+      data_template:
+        entity_id: 
           - light.family_door_lamp
           - light.family_corner_lamp
-      data_template:
-        brightness: 255
-    - service: automation.turn_off
-      data:          
-        entity_id: automation.family_level_change
-    - delay: 0:0:01
-    - service: input_slider.select_value   
-      data_template:     
-        entity_id: input_slider.brightness_fr   
-        value: 255
-    - delay: 0:0:01
-    - service: automation.turn_on
-      data:          
-        entity_id: automation.family_level_change
-
-- alias: 'Family Room Off'
+        brightness: '{{ trigger.to_state.state | int }}'
+- alias: Keep Family room brightness in sync off
+  hide_entity: True
   trigger:
     platform: state
     entity_id: light.family_room_lights
     to: 'off'
   action:
-    - service: light.turn_off
-      data:
-        entity_id:
-          - light.family_door_lamp
-          - light.family_corner_lamp
-- alias: 'Family Level Change'
-  trigger:
-    platform: state
-    entity_id: input_slider.brightness_fr
-  action:
-    - service: automation.turn_off
-      data:          
-        entity_id: automation.family_room_on
-    - delay: 0:0:01
-    - service: light.turn_on
-      data:
-        entity_id:
-          - light.family_room_lights
-          - light.family_door_lamp
-          - light.family_corner_lamp
-      data_template:
-        brightness: '{{ states( "input_slider.brightness_fr" )|round( 0 ) }}'
-    - delay: 0:0:01
-    - service: automation.turn_on
-      data:          
-        entity_id: automation.family_room_on
-
-- alias: 'Family On After Sunset'
+    service: light.turn_off
+    entity_id: group.family_room
+- alias: 'Family Room Motion On Trigger'
+  hide_entity: True
   trigger:
     platform: state
     entity_id: binary_sensor.family_room_motion
-    to: 'on'
+    to: 'off'
   condition:
     condition: and
     conditions:
-      - condition: sun
-        after: sunset
+      - condition: time          
+        before: '22:00:00'       
+      - condition: or
+        conditions:
+          - condition: sun
+            after: sunset    
       - condition: or
         conditions:
         - condition: state
@@ -79,47 +45,38 @@
         - condition: state
           entity_id: light.family_corner_lamp
           state: 'off'
-      - condition: or
-        conditions:      
-        - condition: time          
-          before: '22:00:00'
-          weekday:
-          - sun
-          - mon
-          - tue
-          - wed
-          - thu
-        - condition: time          
-          before: '23:00:00'
-          weekday:
-          - fri
-          - sat
   action:
-    - service: light.turn_on
-      data:
-        entity_id:
-          - light.family_room_lights
-
-- alias: 'Family Room Off 1hr'
+    service: light.turn_on
+    entity_id: group.family_room
+- alias: 'Family Room Motion Off Trigger'
+  hide_entity: True
   trigger:
     platform: state
     entity_id: binary_sensor.family_room_motion
     to: 'off'
-    for:
-      hours: 1
   condition:
     condition: and
     conditions:
-    - condition: state
-      entity_id: group.family_room
-      state: 'on'
-    - condition: or
-      conditions:      
-      - condition: sun
-        before: sunrise
       - condition: time          
-        after: '22:00:00'
+        after: '22:00:00'       
+      - condition: or
+        conditions:
+          - condition: sun
+            after: sunset
+          - condition: sun
+            before: sunrise
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: light.family_room_lights
+          state: 'on'
+        - condition: state
+          entity_id: light.family_door_lamp
+          state: 'on'
+        - condition: state
+          entity_id: light.family_corner_lamp
+          state: 'on'
   action:
-    service: light.turn_off
-    data:
-      entity_id: group.family_room
+    - service: script.turn_off
+      entity_id: script.timed_lamps_familyroom
+    - service: script.timed_lamps_familyroom

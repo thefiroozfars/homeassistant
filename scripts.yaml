@@ -1,0 +1,77 @@
+## keep familyroom lights on while motion ##
+timed_lamps_familyroom:
+  alias: "Turn familyroom lights on and set timer"
+  sequence:
+    # Cancel ev. old timers
+    - service: script.turn_off
+      entity_id: script.timer_off_familyroom
+    # Set new timer
+    - service: script.timer_off_familyroom
+      
+timer_off_familyroom:
+  alias: "Turn familyroom lights off after 30 minutes"
+  sequence:
+    - delay:
+        minutes: 30
+    - service: light.turn_off
+      entity_id: 
+        - light.family_room_lights
+        - light.family_door_lamp
+        - light.family_corner_lamp
+
+## keep livingroom lights on while motion ##
+timed_lamps_livingroom:
+  alias: "Turn livingroom lights on and set timer"
+  sequence:
+    # Cancel ev. old timers
+    - service: script.turn_off
+      entity_id: script.timer_off_livingroom
+    # Set new timer
+    - service: script.timer_off_livingroom
+      
+timer_off_livingroom:
+  alias: "Turn livingroom lights off after 30 minutes"
+  sequence:
+    - delay:
+        minutes: 30
+    - service: light.turn_off
+      entity_id: 
+        - light.living_room_corner_light
+        - light.living_window_lamp
+
+## keep entrance light on while motion ##
+timed_lamp_entrance:
+  alias: "Reset entrance light timer"
+  sequence:
+    # Cancel ev. old timers
+    - service: script.turn_off
+      entity_id: script.timer_off_entrance
+    # Set new timer
+    - service: script.timer_off_entrance
+      
+timer_off_entrance:
+  alias: "Turn entrance lights off after 15 minutes"
+  sequence:
+    - delay:
+        minutes: 15
+    - service: light.turn_off
+      entity_id: light.entrance_lamp
+
+## keep breezeway light on while doors open ##
+timed_lamp_breezeway:
+  alias: "Reset breezeway light timer"
+  sequence:
+    # Cancel ev. old timers
+    - service: script.turn_off
+      entity_id: script.timer_off_breezeway
+    # Set new timer
+    - service: script.timer_off_breezeway
+      
+timer_off_breezeway:
+  alias: "Turn breezeway lights off after 5 minutes"
+  sequence:
+    - delay:
+        minutes: 5
+    - service: light.turn_off
+      entity_id: light.breezeway_lamp
+      

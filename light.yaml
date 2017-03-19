@@ -11,6 +11,8 @@
   payload_off: "off"
   retain: true
   brightness_scale: 99
+  brightness_value_template: '{{ value }}'
+  qos: 0
 - platform: mqtt
   name: "Front Door Lights"
   state_topic: "smartthings/Front door lights/switch"

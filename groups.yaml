@@ -1,7 +1,7 @@
 family_room:
   name: Family Room
   entities:
-    - input_slider.brightness_fr
+    # - input_slider.brightness_fr
     - light.family_room_lights
     - light.family_door_lamp
     - light.family_corner_lamp
@@ -77,3 +77,7 @@ system:
     - sensor.last_boot
     - sensor.speedtest_download
     - sensor.speedtest_upload
+hiddens:
+  view: no
+  entities:
+    - sensor.current_familyroom_brightness

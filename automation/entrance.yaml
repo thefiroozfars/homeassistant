@@ -1,141 +1,42 @@
-- alias: 'Entrance Off On Idle'
+- alias: "Entrance On After Sunset"
+  hide_entity: True
   trigger:
-    platform: state
-    entity_id: binary_sensor.main_floor_motion
-    to: 'off'
-    for:
-      minutes: 1
-  condition:
-    condition: and
-    conditions:
-      - condition: state
-        entity_id: light.entrance_lamp
-        state: 'on'
-      - condition: state
-        entity_id: sun.sun
-        state: 'below_horizon'    
-      - condition: or
-        conditions:      
-        - condition: sun
-          before: sunrise
-        - condition: time          
-          after: '21:00:00'
-          weekday:
-          - sun
-          - mon
-          - tue
-          - wed
-          - thu
-        - condition: time          
-          after: '22:00:00'
-          weekday:
-          - fri
-          - sat
-  action:
-    - service: scene.turn_on
-      data:
-        entity_id: scene.entrance_lamp_off
-
-- alias: 'Entrance on after sunset'
+    - platform: sun
+      event: sunset
+  condition:      
+    condition: state
+    entity_id: light.entrance_lamp
+    state: 'off'
+  action: 
+    service: scene.turn_on
+    data:
+      entity_id: scene.entrance_lamp_bright
+- alias: 'Entrance Motion Trigger'
+  hide_entity: True
   trigger:
     - platform: state
-      entity_id: binary_sensor.main_floor_motion
-      to: 'on'
+      entity_id: binary_sensor.living_room_motion
+      to: 'off'
     - platform: state
       entity_id: binary_sensor.main_door
       to: 'on'
+    - platform: time
+      after: "21:00"
   condition:
     condition: and
     conditions:
-      - condition: sun
-        after: sunset
-      - condition: state
-        entity_id: light.entrance_lamp
-        state: 'off'
+      - condition: time          
+        after: '21:00:00'       
       - condition: or
-        conditions:      
-        - condition: time          
-          before: '21:00:00'
-          weekday:
-          - sun
-          - mon
-          - tue
-          - wed
-          - thu
-        - condition: time          
-          before: '22:00:00'
-          weekday:
-          - fri
-          - sat
-  action:
-    - service: scene.turn_on
-      data:
-        entity_id: scene.entrance_lamp_bright
-- alias: 'Entrance On After Sleep'
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.main_floor_motion
-      to: 'on'
-    - platform: state
-      entity_id: binary_sensor.main_door
-      to: 'on'
-  condition:
-    condition: and
-    conditions:
-      - condition: state
-        entity_id: sun.sun
-        state: 'below_horizon'    
-      - condition: state
-        entity_id: light.entrance_lamp
-        state: 'off'
-      - condition: or
-        conditions:      
-        - condition: sun
-          before: sunrise
-        - condition: time          
-          after: '21:00:00'
-          weekday:
-          - sun
-          - mon
-          - tue
-          - wed
-          - thu
-        - condition: time          
-          after: '22:00:00'
-          weekday:
-          - fri
-          - sat
+        conditions:
+          - condition: sun
+            after: sunset
+          - condition: sun
+            before: sunrise
   action:
     - service: scene.turn_on
       data:
         entity_id: scene.entrance_lamp_nightlight
-- alias: 'Entrance Dim After 9pm'
-  trigger:
-    platform: time
-    after: "21:00"
-  condition:
-    - condition: state
-      entity_id: light.entrance_lamp
-      state: 'on'
-  action:
-    - service: scene.turn_on
-      entity_id: scene.entrance_lamp_nightlight
-- alias: 'Entrance Scene'
-  trigger:
-    platform: state
-    entity_id: input_select.scene_entrance_lamp
-  action:
-    - service: scene.turn_on
-      data_template:
-        entity_id: >
-          {% if is_state( "input_select.scene_entrance_lamp", "Nightlight" ) %}
-            scene.entrance_lamp_nightlight
-          {%-elif is_state( "input_select.scene_entrance_lamp", "Bright" ) %}
-            scene.entrance_lamp_bright
-          {%-elif is_state( "input_select.scene_entrance_lamp", "Off" ) %}
-            scene.entrance_lamp_off
-          {% endif %}
-    - service: input_select.select_option
-      data:
-        entity_id: input_select.scene_entrance_lamp
-        option: "-"
+    - service: script.turn_off
+      entity_id: script.timed_lamp_entrance
+    - service: script.timed_lamp_entrance

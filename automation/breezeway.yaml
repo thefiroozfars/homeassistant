@@ -1,4 +1,5 @@
 - alias: Breezeway On
+  hide_entity: True
   trigger:
     - platform: state
       entity_id: binary_sensor.kitchen_door
@@ -17,20 +18,18 @@
         state: 'off'
   action: 
     service: homeassistant.turn_on
-    entity_id: 
-    - light.breezeway_lamp
-- alias: Breezeway Off After 5min
+    entity_id: light.breezeway_lamp
+- alias: Breezeway Doors Closed
+  hide_entity: True
   trigger:
     - platform: state
       entity_id: binary_sensor.kitchen_door
+      from: 'on'
       to: 'off'
-      for:
-        minutes: 5
     - platform: state
       entity_id: sensor.garage_door_contact
+      from: 'open'
       to: 'closed'
-      for:
-        minutes: 5
   condition:
     condition: and
     conditions:
@@ -44,6 +43,6 @@
         entity_id: binary_sensor.kitchen_door
         state: 'off'
   action: 
-    service: homeassistant.turn_off
-    entity_id: 
-    - light.breezeway_lamp
+    - service: script.turn_off
+      entity_id: script.timed_lamp_breezeway
+    - service: script.timed_lamp_breezeway
