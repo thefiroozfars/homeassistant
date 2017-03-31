@@ -3,6 +3,10 @@
   trigger:
     platform: state
     entity_id: sensor.current_familyroom_brightness
+  condition:
+    condition: numeric_state
+    entity_id: sensor.current_familyroom_brightness
+    above: 15
   action:
     - service: light.turn_on
       data_template:
@@ -17,10 +21,12 @@
     entity_id: light.family_room_lights
     to: 'off'
   action:
-    service: light.turn_off
-    entity_id: group.family_room
+    - service: light.turn_off
+      entity_id: 
+        - light.family_door_lamp
+        - light.family_corner_lamp
 - alias: 'Family Room Motion On Trigger'
-  hide_entity: True
+  # hide_entity: True
   trigger:
     platform: state
     entity_id: binary_sensor.family_room_motion
@@ -58,7 +64,7 @@
     condition: and
     conditions:
       - condition: time          
-        after: '22:00:00'       
+        after: '21:59:00'       
       - condition: or
         conditions:
           - condition: sun
@@ -80,3 +86,20 @@
     - service: script.turn_off
       entity_id: script.timed_lamps_familyroom
     - service: script.timed_lamps_familyroom
+- alias: "Family Room Off Timer"
+  hide_entity: True
+  trigger:
+    platform: time
+    after: '22:00:00'
+  condition:
+    condition: or
+    conditions:
+      - condition: sun
+        after: sunset
+      - condition: sun
+        before: sunrise
+  action:
+    - service: script.turn_off
+      entity_id: script.timed_lamps_familyroom
+    - service: script.timed_lamps_familyroom
+    

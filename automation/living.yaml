@@ -3,6 +3,7 @@
   trigger:
     - platform: sun
       event: sunset
+      offset: '-00:30:00'
   condition:
     condition: or
     conditions:
@@ -18,10 +19,10 @@
       - light.living_room_corner_light
       - light.living_window_lamp
 - alias: "Living Room Off Timer"
-  hide_entity: True
+  # hide_entity: True
   trigger:
     platform: time
-    after: "21:00"
+    after: "21:00:00"
   condition:
     condition: or
     conditions:
@@ -34,10 +35,11 @@
       entity_id: script.timed_lamps_livingroom
     - service: script.timed_lamps_livingroom
 - alias: 'Living Room Motion Trigger'
-  hide_entity: True
+  # hide_entity: True
   trigger:
     platform: state
     entity_id: binary_sensor.living_room_motion
+    from: 'on'
     to: 'off'
   condition:
     condition: and

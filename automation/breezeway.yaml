@@ -20,7 +20,7 @@
     service: homeassistant.turn_on
     entity_id: light.breezeway_lamp
 - alias: Breezeway Doors Closed
-  hide_entity: True
+  # hide_entity: True
   trigger:
     - platform: state
       entity_id: binary_sensor.kitchen_door

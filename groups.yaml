@@ -77,7 +77,3 @@ system:
     - sensor.last_boot
     - sensor.speedtest_download
     - sensor.speedtest_upload
-hiddens:
-  view: no
-  entities:
-    - sensor.current_familyroom_brightness

@@ -16,7 +16,7 @@ conversation:
 history:
 logbook:
 sun:
-#config:
+config:
 
 http:
   api_password: !secret api_password

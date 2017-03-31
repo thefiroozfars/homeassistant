@@ -3,6 +3,7 @@
   trigger:
     - platform: sun
       event: sunset
+      offset: '-00:30:00'
   condition:      
     condition: state
     entity_id: light.entrance_lamp
@@ -12,16 +13,15 @@
     data:
       entity_id: scene.entrance_lamp_bright
 - alias: 'Entrance Motion Trigger'
-  hide_entity: True
+  # hide_entity: True
   trigger:
     - platform: state
-      entity_id: binary_sensor.living_room_motion
+      entity_id: binary_sensor.main_floor_motion
+      from: 'on'
       to: 'off'
     - platform: state
       entity_id: binary_sensor.main_door
       to: 'on'
-    - platform: time
-      after: "21:00"
   condition:
     condition: and
     conditions:
@@ -33,6 +33,25 @@
             after: sunset
           - condition: sun
             before: sunrise
+  action:
+    - service: scene.turn_on
+      data:
+        entity_id: scene.entrance_lamp_nightlight
+    - service: script.turn_off
+      entity_id: script.timed_lamp_entrance
+    - service: script.timed_lamp_entrance
+- alias: 'Entrance After 9pm'
+  hide_entity: True
+  trigger:
+    platform: time
+    after: '21:00:00'
+  condition:
+    condition: or
+    conditions:
+      - condition: sun
+        after: sunset
+      - condition: sun
+        before: sunrise
   action:
     - service: scene.turn_on
       data:
